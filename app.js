@@ -1,33 +1,22 @@
-const http         = require('http'),
-      fs           = require('fs'),
-      path         = require('path'),
-      contentTypes = require('./utils/content-types'),
-      sysInfo      = require('./utils/sys-info'),
-      env          = process.env;
+const express = require('express'),
+	app = express(),
+	bodyParser = require('body-parser'),
+	router = require('./server/router'),
+	port = process.env.NODE_PORT || 8000,
+	ip = process.env.NODE_IP || 'localhost';
 
-let server = http.createServer(function (req, res) {
-  let url = req.url;
-  if (url == '/') {
-    url += 'index.html';
-  }
+// Set up bodyParser to get passed parameters and post bodies as objects
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
-  // IMPORTANT: Your application HAS to respond to GET /health with status 200
-  //            for OpenShift health monitoring
+app.use(bodyParser.json());
 
-  if (url == '/health') {
-    res.writeHead(200);
-    res.end();
-  } else if (url == '/info/gen' || url == '/info/poll') {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'no-cache, no-store');
-    res.end(JSON.stringify(sysInfo[url.slice(6)]()));
-  } else {
-    fs.readFile('./static' + url, function (err, data) {
-      res.end("{status: 'Api Active'}");
-    });
-  }
+// Handle all routes
+router(app);
+
+// Start receiving requests
+app.listen(port, ip, function() {
+	console.log('Listening on port ' + port);
 });
 
-server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
-  console.log(`Application worker ${process.pid} started...`);
-});
