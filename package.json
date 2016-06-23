@@ -1,12 +1,20 @@
 {
-  "name": "openshift-cartridge-nodejs-template",
-  "version": "1.0.1",
-  "description": "Custom Node.js cartridge for OpenShift - sample application",
+  "name": "ennovate",
+  "version": "1.0.0",
+  "description": "Andela Javascript curriculum's fourth checkpoint",
   "private": true,
   "main": "start.js",
   "scripts": {
-    "start": "node --use_strict start.js"
+    "start": "node start.js"
   },
-  "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
-  "license": "ISC"
+  "author": "Kinuthia Ndung'u <kinuthia.ndungu@andela.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.13.2",
+    "dotenv": "^2.0.0",
+    "express": "~4.13.1",
+    "jsonwebtoken": "^6.2.0",
+    "mongoose": "^4.4.14"
+  }
 }
